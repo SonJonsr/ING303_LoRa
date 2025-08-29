@@ -1,6 +1,7 @@
 #include <SPI.h>                    //står at er feil må ha lastet ned disse to
 #include <LoRa.h>
 
+// jeg bruker ESP32-S3 Dev Board
 
 // Samme GPIO-er som sender
 #define SCK     18
@@ -19,7 +20,6 @@ void setup() {
   SPI.begin(SCK, MISO, MOSI, SS);
   LoRa.setSPI(SPI);
 
-
   LoRa.setPins(SS, RST, DIO0);
  
   if (!LoRa.begin(868E6)) {
@@ -27,18 +27,14 @@ void setup() {
     while (1);
   }
 
-
   Serial.println("LoRa klar til å motta");
 }
-
 
 void loop() {
   int packetSize = LoRa.parsePacket();
   String s = "";
   if (packetSize) {                   // venter bare på ny pakke
     Serial.print("Mottatt pakke: ");
-   
-
 
     while (LoRa.available()) {        //leser inn meldingen
       char c = (char)LoRa.read(); 
@@ -46,15 +42,11 @@ void loop() {
       Serial.print(c);
     }
 
-
-
-
     delay(100);                       // venter litt før den sender samme melding tilbake
     LoRa.beginPacket();
     LoRa.print(s);
     LoRa.endPacket();
     Serial.println();
-
      
     Serial.print("RSSI: ");           // viser litt praktisk info
     Serial.println(LoRa.packetRssi());
