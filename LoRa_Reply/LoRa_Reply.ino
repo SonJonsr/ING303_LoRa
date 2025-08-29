@@ -1,4 +1,4 @@
-#include <SPI.h> //står at er feil må ha lastet ned disse to
+#include <SPI.h>                    //står at er feil må ha lastet ned disse to
 #include <LoRa.h>
 
 
@@ -9,16 +9,12 @@
 #define SS      10
 #define RST      9
 #define DIO0     4
-int disnuts = 0;
-
 
 void setup() {
   Serial.begin(115200);
-  while (!Serial);
-
+  while (!Serial);                    // venter til Serial har startet
 
   Serial.println("LoRa Mottaker starter");
-
 
   SPI.begin(SCK, MISO, MOSI, SS);
   LoRa.setSPI(SPI);
@@ -39,13 +35,13 @@ void setup() {
 void loop() {
   int packetSize = LoRa.parsePacket();
   String s = "";
-  if (packetSize) {
+  if (packetSize) {                   // venter bare på ny pakke
     Serial.print("Mottatt pakke: ");
    
 
 
-    while (LoRa.available()) {
-      char c = (char)LoRa.read();
+    while (LoRa.available()) {        //leser inn meldingen
+      char c = (char)LoRa.read(); 
       s += c;
       Serial.print(c);
     }
@@ -53,18 +49,14 @@ void loop() {
 
 
 
-    delay(100);
+    delay(100);                       // venter litt før den sender samme melding tilbake
     LoRa.beginPacket();
     LoRa.print(s);
     LoRa.endPacket();
+    Serial.println();
 
-
-    disnuts++;
-
-
-   
-    Serial.println(); // Ny linje etter pakke
-    Serial.print("RSSI: ");
+     
+    Serial.print("RSSI: ");           // viser litt praktisk info
     Serial.println(LoRa.packetRssi());
     Serial.print("SNR:  ");
     Serial.print(LoRa.packetSnr());
@@ -73,4 +65,3 @@ void loop() {
   }
  
 }
-
