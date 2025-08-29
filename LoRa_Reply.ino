@@ -1,4 +1,4 @@
-#include <SPI.h>
+#include <SPI.h> //står at er feil må ha lastet ned disse to
 #include <LoRa.h>
 
 
